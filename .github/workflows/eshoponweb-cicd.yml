@@ -9,7 +9,7 @@ env:
   LOCATION: eastus
   TEMPLATE-FILE: infra/webapp.bicep
   SUBSCRIPTION-ID: d470c937-42bc-4a9c-9831-116799e343d9
-  WEBAPP-NAME: az2006app2920
+  WEBAPP-NAME: az2006app9637
 
 jobs:
   #Build, test and publish .net web project in repository
@@ -66,26 +66,3 @@ jobs:
     - name: Download artifact from build job
       uses: actions/download-artifact@v6
       with:
-        name: bicep-template
-        path: bicep-template
-
-    #Azure Login
-    - name: Azure Login
-      uses: azure/login@v2
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-    - name: Deploy Bicep file
-      uses: azure/arm-deploy@v2
-      with:
-        subscriptionId: ${{ env.SUBSCRIPTION-ID }}
-        resourceGroupName: ${{ env.RESOURCE-GROUP }}
-        template: bicep-template/webapp.bicep
-        parameters: 'webAppName=${{ env.WEBAPP-NAME }} location=${{ env.LOCATION }}'
-        failOnStdErr: false
-
-    - name: Publish Website to WebApp
-      uses: Azure/webapps-deploy@v3
-      with:
-        app-name: ${{ env.WEBAPP-NAME }}
-        package: .net-app/app.zip
